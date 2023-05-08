@@ -1,0 +1,25 @@
+name: clang-format
+
+on: [push]
+
+jobs:
+  clang-format-job:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Install clang-format 15.0
+        run: |
+          sudo apt-get update
+          sudo apt install clang-format-15
+          clang-format --version
+      - uses: actions/checkout@v3
+      - name: Check format
+        run: |
+          find -name *.h -o -name *.cpp -o -name *.inl | xargs clang-format -i
+          git diff
+      - uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "Fixes by clang-format"
+          title: "Fixes by clang-format"
+          branch: clang-format-patches
+          branch-suffix: random

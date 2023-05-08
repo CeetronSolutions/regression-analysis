@@ -1,0 +1,86 @@
+name: build-and-test
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    name: ${{ matrix.config.name }}
+    runs-on: ${{ matrix.config.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {
+            name: "Windows 2022 MSVC Release",
+            os: windows-2022,
+            build_type: "Release", cc: "cl", cxx: "cl",
+          }
+          - {
+            name: "Ubuntu 20.04 GCC Release",
+            os: ubuntu-20.04,
+            build_type: "Release", cc: "gcc", cxx: "g++"
+          }
+          - {
+            name: "Ubuntu 20.04 Clang Release",
+            os: ubuntu-20.04,
+            build_type: "Release", cc: "clang", cxx: "clang++"
+          }
+          - {
+            name: "Ubuntu 22.04 GCC Release",
+            os: ubuntu-22.04,
+            build_type: "Release", cc: "gcc", cxx: "g++"
+          }
+          - {
+            name: "Ubuntu 22.04 Clang Release",
+            os: ubuntu-22.04,
+            build_type: "Release", cc: "clang", cxx: "clang++"
+          }
+          - {
+            name: "macOS 12 Clang Release",
+            os: macos-12,
+            build_type: "Release", cc: "clang", cxx: "clang++"
+          }
+          - {
+            name: "Windows 2022 MSVC Debug",
+            os: windows-2022,
+            build_type: "Debug", cc: "cl", cxx: "cl",
+          }
+          - {
+            name: "Ubuntu 20.04 GCC Debug",
+            os: ubuntu-20.04,
+            build_type: "Debug", cc: "gcc", cxx: "g++"
+          }
+          - {
+            name: "Ubuntu 20.04 Clang Debug",
+            os: ubuntu-20.04,
+            build_type: "Debug", cc: "clang", cxx: "clang++"
+          }
+          - {
+            name: "Ubuntu 22.04 GCC Debug",
+            os: ubuntu-22.04,
+            build_type: "Debug", cc: "gcc", cxx: "g++"
+          }
+          - {
+            name: "Ubuntu 22.04 Clang Debug",
+            os: ubuntu-22.04,
+            build_type: "Debug", cc: "clang", cxx: "clang++"
+          }
+          - {
+            name: "macOS 12 Clang Debug",
+            os: macos-12,
+            build_type: "Debug", cc: "clang", cxx: "clang++"
+          }
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Configure CMake
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
+
+    - name: Build
+      run: cmake --build ${{github.workspace}}/build --config ${{ matrix.config.build_type }}
+
+    - name: Test
+      working-directory: ${{github.workspace}}/build
+      run: ctest -C ${{ matrix.config.build_type }} -V
