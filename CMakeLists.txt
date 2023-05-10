@@ -5,6 +5,17 @@ project(regression-analysis
   DESCRIPTION "Regression library for C++."
   LANGUAGES CXX)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+option(REGRESSION_ANALYSIS_VCPKG_AUTO_INSTALL "Automatically download build pre-requisites with VCPKG" OFF)
+
+if(REGRESSION_ANALYSIS_VCPKG_AUTO_INSTALL)
+  include(AutoVcpkg)
+  set(AUTO_VCPKG_ROOT "${CMAKE_SOURCE_DIR}/vcpkg")
+  vcpkg_install(eigen3)
+  include(${CMAKE_TOOLCHAIN_FILE})
+endif()
+
 find_package(Eigen3 REQUIRED)
 
 add_subdirectory(src)
