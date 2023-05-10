@@ -14,6 +14,7 @@ if(REGRESSION_ANALYSIS_VCPKG_AUTO_INSTALL)
   include(AutoVcpkg)
   set(AUTO_VCPKG_ROOT "${CMAKE_SOURCE_DIR}/vcpkg")
   vcpkg_install(eigen3)
+  set(CMAKE_TOOLCHAIN_FILE "${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake")
 endif()
 
 find_package(Eigen3 REQUIRED)
