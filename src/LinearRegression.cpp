@@ -52,7 +52,7 @@ void LinearRegression::fit( const std::vector<double>& x, const std::vector<doub
     Eigen::VectorXd Y( y.size() );
     copyData( y, Y );
 
-    int n = x.size();
+    size_t n = x.size();
 
     m_slope     = 0.0;
     m_intercept = 0.0;

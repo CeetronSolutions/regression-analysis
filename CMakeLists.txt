@@ -5,6 +5,9 @@ project(regression-analysis
   DESCRIPTION "Regression library for C++."
   LANGUAGES CXX)
 
+
+add_subdirectory(thirdparty)
+
 find_package(Eigen3 REQUIRED)
 
 add_subdirectory(src)

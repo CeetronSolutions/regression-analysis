@@ -25,7 +25,7 @@ add_executable(regression-analysis-tests LinearRegressionTests.cpp)
 target_include_directories(regression-analysis-tests PUBLIC ../src/)
 
 if(MSVC)
-  target_compile_options(regression-analysis-tests PRIVATE /W4 /WX)
+  target_compile_options(regression-analysis-tests PRIVATE /W4 /WX /wd4127)
 else()
   target_compile_options(regression-analysis-tests PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
