@@ -19,6 +19,7 @@
 #include "LinearRegression.hpp"
 
 #include <Eigen/Core>
+#include <Eigen/Dense>
 
 using namespace regression;
 
@@ -36,40 +37,25 @@ LinearRegression::LinearRegression()
 //--------------------------------------------------------------------------------------------------
 void LinearRegression::fit( const std::vector<double>& x, const std::vector<double>& y )
 {
-    double learningRate  = 0.01;
-    int    numIterations = 10000;
+    std::size_t n = x.size();
 
-    auto copyData = []( const std::vector<double>& from, Eigen::VectorXd& to )
+    // Create a matrix to hold the input data and a vector to hold the output data
+    Eigen::MatrixXd X( n, 2 );
+    Eigen::VectorXd Y( n );
+
+    // Fill the matrix and vector with data
+    for ( std::size_t i = 0; i < n; i++ )
     {
-        size_t numElements = from.size();
-        for ( size_t i = 0; i < numElements; i++ )
-            to[i] = from[i];
-    };
-
-    Eigen::VectorXd X( x.size() );
-    copyData( x, X );
-
-    Eigen::VectorXd Y( y.size() );
-    copyData( y, Y );
-
-    size_t n = x.size();
-
-    m_slope     = 0.0;
-    m_intercept = 0.0;
-
-    // Find Gradient Descent
-    for ( int i = 0; i < numIterations; i++ )
-    {
-        // Compute current prediction
-        Eigen::VectorXd Y_pred = ( m_slope * X ).array() + m_intercept;
-        // Compute derivative of slope
-        double slopeDerivative = ( -2.0 / n ) * ( X.cwiseProduct( Y - Y_pred ) ).sum();
-        // Compute derivative of the intercept
-        double interceptDerivative = ( -2.0 / n ) * ( Y - Y_pred ).sum();
-
-        m_slope     = m_slope - learningRate * slopeDerivative;
-        m_intercept = m_intercept - learningRate * interceptDerivative;
+        X( i, 0 ) = x[i];
+        X( i, 1 ) = 1.0;
+        Y( i )    = y[i];
     }
+
+    // Use Eigen's QR decomposition to calculate the regression coefficients
+    Eigen::VectorXd beta = X.colPivHouseholderQr().solve( Y );
+
+    m_slope     = beta( 0 );
+    m_intercept = beta( 1 );
 }
 
 //--------------------------------------------------------------------------------------------------
