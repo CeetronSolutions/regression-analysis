@@ -31,6 +31,8 @@ public:
     double slope() const;
     double intercept() const;
 
+    std::vector<double> predict( const std::vector<double>& values ) const;
+
 private:
     double m_slope;
     double m_intercept;

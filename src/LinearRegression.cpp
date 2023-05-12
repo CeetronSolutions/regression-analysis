@@ -87,3 +87,15 @@ double LinearRegression::intercept() const
 {
     return m_intercept;
 }
+
+//--------------------------------------------------------------------------------------------------
+///
+//--------------------------------------------------------------------------------------------------
+std::vector<double> LinearRegression::predict( const std::vector<double>& values ) const
+{
+    std::vector<double> predictedValues;
+    for ( auto v : values )
+        predictedValues.push_back( v * m_slope + m_intercept );
+
+    return predictedValues;
+}

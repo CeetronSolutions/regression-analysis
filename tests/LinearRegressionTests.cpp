@@ -38,4 +38,18 @@ TEST( LinearRegressionTests, SimpleTest )
     regression.fit( x, y );
     ASSERT_NEAR( expectedSlope, regression.slope(), 0.00001 );
     ASSERT_NEAR( expectedIntercept, regression.intercept(), 0.00001 );
+
+    std::vector<double> input = { 1.0, 1.2, 4.0, 4.3, 44.4 };
+
+    std::vector<double> expectedValues;
+    for ( auto v : input )
+    {
+        expectedValues.push_back( expectedSlope * v + expectedIntercept );
+    }
+
+    std::vector<double> predictedValues = regression.predict( input );
+    for ( size_t i = 0; i < input.size(); i++ )
+    {
+        ASSERT_NEAR( expectedValues[i], predictedValues[i], 0.00001 );
+    }
 }
