@@ -1,5 +1,5 @@
-set(HEADER_LIST "LinearRegression.hpp" "PolynominalRegression.hpp")
-set(SOURCE_LIST "LinearRegression.cpp" "PolynominalRegression.cpp")
+set(HEADER_LIST "LinearRegression.hpp" "PolynominalRegression.hpp" "PowerFitRegression.hpp")
+set(SOURCE_LIST "LinearRegression.cpp" "PolynominalRegression.cpp" "PowerFitRegression.cpp")
 
 add_library(regression-analysis ${SOURCE_LIST} ${HEADER_LIST})
 
