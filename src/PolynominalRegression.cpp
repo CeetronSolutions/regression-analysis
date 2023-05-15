@@ -16,7 +16,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////////
 
-#include "LinearRegression.hpp"
+#include "PolynominalRegression.hpp"
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -26,62 +26,73 @@ using namespace regression;
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-LinearRegression::LinearRegression()
-    : m_slope( 0.0 )
-    , m_intercept( 0.0 )
+PolynominalRegression::PolynominalRegression()
 {
 }
 
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-void LinearRegression::fit( const std::vector<double>& x, const std::vector<double>& y )
+void PolynominalRegression::fit( const std::vector<double>& x, const std::vector<double>& y, int degree )
 {
     std::size_t n = x.size();
 
     // Create a matrix to hold the input data and a vector to hold the output data
-    Eigen::MatrixXd X( n, 2 );
+    Eigen::MatrixXd X( n, degree + 1 );
     Eigen::VectorXd Y( n );
 
     // Fill the matrix and vector with data
     for ( std::size_t i = 0; i < n; i++ )
     {
-        X( i, 0 ) = x[i];
-        X( i, 1 ) = 1.0;
-        Y( i )    = y[i];
+        for ( std::size_t j = 0; j <= static_cast<size_t>( degree ); j++ )
+        {
+            X( i, j ) = std::pow( x[i], j );
+        }
+
+        Y( i ) = y[i];
     }
 
-    // Use Eigen's QR decomposition to calculate the regression coefficients
-    Eigen::VectorXd beta = X.colPivHouseholderQr().solve( Y );
+    // Solve for coeffisients
+    Eigen::VectorXd coeffs = X.colPivHouseholderQr().solve( Y );
 
-    m_slope     = beta( 0 );
-    m_intercept = beta( 1 );
+    m_coeffisients.clear();
+    for ( int i = 0; i < coeffs.size(); i++ )
+    {
+        m_coeffisients.push_back( coeffs( i ) );
+    }
 }
 
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-double LinearRegression::slope() const
+std::vector<double> PolynominalRegression::coeffisients() const
 {
-    return m_slope;
+    return m_coeffisients;
 }
 
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-double LinearRegression::intercept() const
-{
-    return m_intercept;
-}
-
-//--------------------------------------------------------------------------------------------------
-///
-//--------------------------------------------------------------------------------------------------
-std::vector<double> LinearRegression::predict( const std::vector<double>& values ) const
+std::vector<double> PolynominalRegression::predict( const std::vector<double>& values ) const
 {
     std::vector<double> predictedValues;
+
     for ( auto v : values )
-        predictedValues.push_back( v * m_slope + m_intercept );
+        predictedValues.push_back( computePolynominal( v, m_coeffisients ) );
 
     return predictedValues;
+}
+
+//--------------------------------------------------------------------------------------------------
+///
+//--------------------------------------------------------------------------------------------------
+double PolynominalRegression::computePolynominal( double input, const std::vector<double>& coeffisients )
+{
+    double result = 0.0;
+    for ( size_t j = 0; j < coeffisients.size(); j++ )
+    {
+        result += coeffisients[j] * std::pow( input, j );
+    }
+
+    return result;
 }
