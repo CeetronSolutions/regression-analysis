@@ -5,8 +5,10 @@ project(regression-analysis
   DESCRIPTION "Regression library for C++."
   LANGUAGES CXX)
 
-
-add_subdirectory(thirdparty)
+option(REGRESSION_FETCH_EIGEN "Fetch Eigen" ON)
+if(REGRESSION_FETCH_EIGEN)
+  add_subdirectory(thirdparty)
+endif()
 
 find_package(Eigen3 REQUIRED)
 
