@@ -4,7 +4,7 @@ set(SOURCE_LIST "LinearRegression.cpp" "PolynominalRegression.cpp" "PowerFitRegr
 add_library(regression-analysis ${SOURCE_LIST} ${HEADER_LIST})
 
 if(MSVC)
-  target_compile_options(regression-analysis PRIVATE /W4 /WX /wd4127)
+  target_compile_options(regression-analysis PRIVATE /W4 /WX /wd4127 /wd5054)
 else()
   target_compile_options(regression-analysis PRIVATE -Wall -Wextra -Wpedantic -Werror)
 endif()
