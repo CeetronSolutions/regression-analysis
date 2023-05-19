@@ -33,8 +33,11 @@ public:
 
     std::vector<double> predict( const std::vector<double>& values ) const;
 
+    double r2() const;
+
 private:
     double m_scale;
     double m_exponent;
+    double m_r2;
 };
 } // namespace regression

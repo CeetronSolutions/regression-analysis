@@ -22,22 +22,9 @@
 
 namespace regression
 {
-class PolynominalRegression
+class Utils
 {
 public:
-    PolynominalRegression();
-
-    void                fit( const std::vector<double>& x, const std::vector<double>& y, int degree );
-    std::vector<double> coeffisients() const;
-
-    std::vector<double> predict( const std::vector<double>& values ) const;
-
-    double r2() const;
-
-    static double computePolynominal( double input, const std::vector<double>& coeffisients );
-
-private:
-    std::vector<double> m_coeffisients;
-    double              m_r2;
+    static double computeR2( const std::vector<double>& actualY, const std::vector<double>& predictedY );
 };
 } // namespace regression

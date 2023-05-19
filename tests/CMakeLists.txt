@@ -19,7 +19,7 @@ set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 
 # Tests need to be added as executables first
-add_executable(regression-analysis-tests LinearRegressionTests.cpp PolynominalRegressionTests.cpp PowerFitRegressionTests.cpp)
+add_executable(regression-analysis-tests LinearRegressionTests.cpp PolynominalRegressionTests.cpp PowerFitRegressionTests.cpp UtilsTests.cpp)
 
 
 target_include_directories(regression-analysis-tests PUBLIC ../src/)
