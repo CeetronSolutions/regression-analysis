@@ -18,6 +18,8 @@
 
 #include "LinearRegression.hpp"
 
+#include "Utils.hpp"
+
 #include <Eigen/Core>
 #include <Eigen/Dense>
 
@@ -56,6 +58,8 @@ void LinearRegression::fit( const std::vector<double>& x, const std::vector<doub
 
     m_slope     = beta( 0 );
     m_intercept = beta( 1 );
+
+    m_r2 = Utils::computeR2( y, predict( x ) );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -72,6 +76,14 @@ double LinearRegression::slope() const
 double LinearRegression::intercept() const
 {
     return m_intercept;
+}
+
+//--------------------------------------------------------------------------------------------------
+///
+//--------------------------------------------------------------------------------------------------
+double LinearRegression::r2() const
+{
+    return m_r2;
 }
 
 //--------------------------------------------------------------------------------------------------

@@ -18,6 +18,7 @@
 
 #include "PowerFitRegression.hpp"
 #include "LinearRegression.hpp"
+#include "Utils.hpp"
 
 #include <Eigen/Core>
 #include <Eigen/Dense>
@@ -53,6 +54,8 @@ void PowerFitRegression::fit( const std::vector<double>& x, const std::vector<do
 
     m_scale    = std::exp( reg.intercept() );
     m_exponent = reg.slope();
+
+    m_r2 = Utils::computeR2( y, predict( x ) );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -69,6 +72,14 @@ double PowerFitRegression::scale() const
 double PowerFitRegression::exponent() const
 {
     return m_exponent;
+}
+
+//--------------------------------------------------------------------------------------------------
+///
+//--------------------------------------------------------------------------------------------------
+double PowerFitRegression::r2() const
+{
+    return m_r2;
 }
 
 //--------------------------------------------------------------------------------------------------

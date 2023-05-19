@@ -18,6 +18,8 @@
 
 #include "PolynominalRegression.hpp"
 
+#include "Utils.hpp"
+
 #include <Eigen/Core>
 #include <Eigen/Dense>
 
@@ -60,6 +62,8 @@ void PolynominalRegression::fit( const std::vector<double>& x, const std::vector
     {
         m_coeffisients.push_back( coeffs( i ) );
     }
+
+    m_r2 = Utils::computeR2( y, predict( x ) );
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -68,6 +72,14 @@ void PolynominalRegression::fit( const std::vector<double>& x, const std::vector
 std::vector<double> PolynominalRegression::coeffisients() const
 {
     return m_coeffisients;
+}
+
+//--------------------------------------------------------------------------------------------------
+///
+//--------------------------------------------------------------------------------------------------
+double PolynominalRegression::r2() const
+{
+    return m_r2;
 }
 
 //--------------------------------------------------------------------------------------------------
