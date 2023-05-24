@@ -22,10 +22,10 @@
 
 namespace regression
 {
-class LogarithmicRegression
+class ExponentialRegression
 {
 public:
-    LogarithmicRegression();
+    ExponentialRegression();
 
     void   fit( const std::vector<double>& x, const std::vector<double>& y );
     double a() const;

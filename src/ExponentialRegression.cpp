@@ -16,7 +16,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////////
 
-#include "LogarithmicRegression.hpp"
+#include "ExponentialRegression.hpp"
 
 #include "Utils.hpp"
 
@@ -28,7 +28,7 @@ using namespace regression;
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-LogarithmicRegression::LogarithmicRegression()
+ExponentialRegression::ExponentialRegression()
     : m_a( 0.0 )
     , m_b( 0.0 )
 {
@@ -37,7 +37,7 @@ LogarithmicRegression::LogarithmicRegression()
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-void LogarithmicRegression::fit( const std::vector<double>& x, const std::vector<double>& y )
+void ExponentialRegression::fit( const std::vector<double>& x, const std::vector<double>& y )
 {
     std::size_t n = x.size();
 
@@ -49,14 +49,14 @@ void LogarithmicRegression::fit( const std::vector<double>& x, const std::vector
     for ( std::size_t i = 0; i < n; i++ )
     {
         X( i, 0 ) = 1.0;
-        X( i, 1 ) = std::log( x[i] );
-        Y( i )    = y[i];
+        X( i, 1 ) = x[i];
+        Y( i )    = std::log( y[i] );
     }
 
     // Use Eigen's QR decomposition to calculate the regression coefficients
     Eigen::VectorXd beta = X.colPivHouseholderQr().solve( Y );
 
-    m_a = beta( 0 );
+    m_a = std::exp( beta( 0 ) );
     m_b = beta( 1 );
 
     m_r2 = Utils::computeR2( y, predict( x ) );
@@ -65,15 +65,7 @@ void LogarithmicRegression::fit( const std::vector<double>& x, const std::vector
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-double LogarithmicRegression::a() const
-{
-    return m_a;
-}
-
-//--------------------------------------------------------------------------------------------------
-///
-//--------------------------------------------------------------------------------------------------
-double LogarithmicRegression::b() const
+double ExponentialRegression::b() const
 {
     return m_b;
 }
@@ -81,7 +73,15 @@ double LogarithmicRegression::b() const
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-double LogarithmicRegression::r2() const
+double ExponentialRegression::a() const
+{
+    return m_a;
+}
+
+//--------------------------------------------------------------------------------------------------
+///
+//--------------------------------------------------------------------------------------------------
+double ExponentialRegression::r2() const
 {
     return m_r2;
 }
@@ -89,11 +89,11 @@ double LogarithmicRegression::r2() const
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-std::vector<double> LogarithmicRegression::predict( const std::vector<double>& values ) const
+std::vector<double> ExponentialRegression::predict( const std::vector<double>& values ) const
 {
     std::vector<double> predictedValues;
     for ( auto v : values )
-        predictedValues.push_back( std::log( v ) * m_b + m_a );
+        predictedValues.push_back( std::exp( v * m_b ) * m_a );
 
     return predictedValues;
 }

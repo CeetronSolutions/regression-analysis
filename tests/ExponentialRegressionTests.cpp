@@ -19,38 +19,37 @@
 #include "gtest/gtest.h"
 #include <cmath>
 
-#include "LogarithmicRegression.hpp"
+#include "ExponentialRegression.hpp"
 
 using namespace regression;
 
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-TEST( LogarithmicRegressionTests, SimpleTest )
+TEST( ExponentialRegressionTests, SimpleTest )
 {
-    // Test data generated python/numpy: np.polyfit(np.log(x), y, 1)
+    // Test data generated python/numpy: np.polyfit(x, np.log(y), 1)
     std::vector<double> x = { 1, 2, 3, 4, 5 };
     std::vector<double> y = { 0.5, 1.2, 1.8, 2.3, 2.8 };
 
-    double expectedA = 0.37475388;
-    double expectedB = 1.40495921;
-
-    LogarithmicRegression regression;
+    double                expectedA = std::exp( -0.84093831 );
+    double                expectedB = 0.40961208;
+    ExponentialRegression regression;
     regression.fit( x, y );
-    ASSERT_NEAR( expectedA, regression.a(), 0.00001 );
     ASSERT_NEAR( expectedB, regression.b(), 0.00001 );
+    ASSERT_NEAR( expectedA, regression.a(), 0.00001 );
 
     std::vector<double> input = { 1.0, 1.2, 4.0, 4.3, 44.4 };
 
     std::vector<double> expectedValues;
     for ( auto v : input )
     {
-        expectedValues.push_back( expectedB * std::log( v ) + expectedA );
+        expectedValues.push_back( std::exp( v * expectedB ) * expectedA );
     }
 
     std::vector<double> predictedValues = regression.predict( input );
     for ( size_t i = 0; i < input.size(); i++ )
     {
-        ASSERT_NEAR( expectedValues[i], predictedValues[i], 0.00001 );
+        ASSERT_NEAR( expectedValues[i], predictedValues[i], expectedValues[i] * 0.0000002 );
     }
 }
