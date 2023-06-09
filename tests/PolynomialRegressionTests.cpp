@@ -18,14 +18,14 @@
 
 #include "gtest/gtest.h"
 
-#include "PolynominalRegression.hpp"
+#include "PolynomialRegression.hpp"
 
 using namespace regression;
 
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-TEST( PolynominalRegressionTests, SimpleTest )
+TEST( PolynomialRegressionTests, SimpleTest )
 {
     // Test data generated with scikit-learn
     std::vector<double> x              = { 2, 3, 4, 5, 6, 7, 7, 8, 9, 11, 12 };
@@ -34,7 +34,7 @@ TEST( PolynominalRegressionTests, SimpleTest )
     std::vector<double> input          = { 1.0, 1.2, 4.0, 4.3, 44.4 };
     std::vector<double> expectedValues = { 23.93466313, 22.48024193, 15.39687368, 15.77386375, -5576.21655925 };
 
-    PolynominalRegression regression;
+    PolynomialRegression regression;
     regression.fit( x, y, 3 );
 
     std::vector<double> actualCoeffs = regression.coeffisients();

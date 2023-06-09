@@ -16,7 +16,7 @@
 //
 /////////////////////////////////////////////////////////////////////////////////
 
-#include "PolynominalRegression.hpp"
+#include "PolynomialRegression.hpp"
 
 #include "Utils.hpp"
 
@@ -28,14 +28,14 @@ using namespace regression;
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-PolynominalRegression::PolynominalRegression()
+PolynomialRegression::PolynomialRegression()
 {
 }
 
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-void PolynominalRegression::fit( const std::vector<double>& x, const std::vector<double>& y, int degree )
+void PolynomialRegression::fit( const std::vector<double>& x, const std::vector<double>& y, int degree )
 {
     std::size_t n = x.size();
 
@@ -69,7 +69,7 @@ void PolynominalRegression::fit( const std::vector<double>& x, const std::vector
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-std::vector<double> PolynominalRegression::coeffisients() const
+std::vector<double> PolynomialRegression::coeffisients() const
 {
     return m_coeffisients;
 }
@@ -77,7 +77,7 @@ std::vector<double> PolynominalRegression::coeffisients() const
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-double PolynominalRegression::r2() const
+double PolynomialRegression::r2() const
 {
     return m_r2;
 }
@@ -85,12 +85,12 @@ double PolynominalRegression::r2() const
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-std::vector<double> PolynominalRegression::predict( const std::vector<double>& values ) const
+std::vector<double> PolynomialRegression::predict( const std::vector<double>& values ) const
 {
     std::vector<double> predictedValues;
 
     for ( auto v : values )
-        predictedValues.push_back( computePolynominal( v, m_coeffisients ) );
+        predictedValues.push_back( computePolynomial( v, m_coeffisients ) );
 
     return predictedValues;
 }
@@ -98,7 +98,7 @@ std::vector<double> PolynominalRegression::predict( const std::vector<double>& v
 //--------------------------------------------------------------------------------------------------
 ///
 //--------------------------------------------------------------------------------------------------
-double PolynominalRegression::computePolynominal( double input, const std::vector<double>& coeffisients )
+double PolynomialRegression::computePolynomial( double input, const std::vector<double>& coeffisients )
 {
     double result = 0.0;
     for ( size_t j = 0; j < coeffisients.size(); j++ )
