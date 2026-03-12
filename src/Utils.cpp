@@ -21,6 +21,8 @@
 #include <Eigen/Core>
 #include <Eigen/Dense>
 
+#include <assert.h>
+
 using namespace regression;
 
 //--------------------------------------------------------------------------------------------------
