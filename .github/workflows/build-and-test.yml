@@ -38,6 +38,12 @@ jobs:
             build_type: "Release", cc: "clang", cxx: "clang++"
           }
           - {
+            name: "macOS 26 ARM64 LLVM 20 Release",
+            os: macos-26,
+            build_type: "Release", cc: "clang", cxx: "clang++",
+            llvm: 20
+          }
+          - {
             name: "Windows 2022 MSVC Debug",
             os: windows-2022,
             build_type: "Debug", cc: "cl", cxx: "cl",
@@ -62,11 +68,23 @@ jobs:
             os: macos-26,
             build_type: "Debug", cc: "clang", cxx: "clang++"
           }
+          - {
+            name: "macOS 26 ARM64 LLVM 20 Debug",
+            os: macos-26,
+            build_type: "Debug", cc: "clang", cxx: "clang++",
+            llvm: 20
+          }
     steps:
     - uses: actions/checkout@v6
 
+    - name: Install LLVM ${{ matrix.config.llvm }}
+      if: matrix.config.llvm
+      run: |
+        brew install llvm@${{ matrix.config.llvm }}
+        echo "$(brew --prefix llvm@${{ matrix.config.llvm }})/bin" >> $GITHUB_PATH
+
     - name: Configure CMake
-      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }}
+      run: cmake -B ${{github.workspace}}/build -DCMAKE_BUILD_TYPE=${{ matrix.config.build_type }} -DCMAKE_C_COMPILER=${{ matrix.config.cc }} -DCMAKE_CXX_COMPILER=${{ matrix.config.cxx }}
 
     - name: Build
       run: cmake --build ${{github.workspace}}/build --config ${{ matrix.config.build_type }}
